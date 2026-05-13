@@ -17,12 +17,17 @@
           <div class="stat-number">{{ estudiosStore.items.length }}</div>
           <div class="stat-label">Estudios</div>
         </router-link>
+        <router-link to="/admin/perfil" class="stat-card card">
+          <div class="stat-number">{{ perfilStore.items.length }}</div>
+          <div class="stat-label">Perfiles</div>
+        </router-link>
       </div>
 
       <div class="admin-actions">
         <router-link to="/admin/proyectos" class="btn btn-primary">Gestionar Proyectos</router-link>
         <router-link to="/admin/experiencias" class="btn btn-primary">Gestionar Experiencias</router-link>
         <router-link to="/admin/estudios" class="btn btn-primary">Gestionar Estudios</router-link>
+        <router-link to="/admin/perfil" class="btn btn-primary">Sobre Mí</router-link>
       </div>
 
       <button class="btn btn-outline logout-btn" @click="handleLogout">Cerrar Sesión</button>
@@ -38,12 +43,14 @@ import { useAuthStore } from '../../stores/auth'
 import { useProyectosStore } from '../../stores/proyectos'
 import { useExperienciasStore } from '../../stores/experiencias'
 import { useEstudiosStore } from '../../stores/estudios'
+import { usePerfilStore } from '../../stores/perfil'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const proyectosStore = useProyectosStore()
 const experienciasStore = useExperienciasStore()
 const estudiosStore = useEstudiosStore()
+const perfilStore = usePerfilStore()
 
 function handleLogout() {
   authStore.logout()
@@ -55,13 +62,14 @@ onMounted(() => {
   proyectosStore.fetchAll()
   experienciasStore.fetchAll()
   estudiosStore.fetchAll()
+  perfilStore.fetchAll()
 })
 </script>
 
 <style scoped>
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }

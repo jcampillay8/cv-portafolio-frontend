@@ -17,6 +17,11 @@ const routes = [
     component: () => import('../views/public/ExperienciaDetail.vue'),
   },
   {
+    path: '/sobre-mi',
+    name: 'About',
+    component: () => import('../views/public/About.vue'),
+  },
+  {
     path: '/admin/login',
     name: 'Login',
     component: () => import('../views/admin/Login.vue'),
@@ -43,6 +48,12 @@ const routes = [
     path: '/admin/estudios',
     name: 'EstudiosAdmin',
     component: () => import('../views/admin/EstudiosAdmin.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/admin/perfil',
+    name: 'PerfilAdmin',
+    component: () => import('../views/admin/PerfilAdmin.vue'),
     meta: { requiresAuth: true },
   },
 ]

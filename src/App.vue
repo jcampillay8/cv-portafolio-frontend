@@ -8,6 +8,11 @@
         </router-link>
         <nav class="nav">
           <router-link to="/" class="nav-link">Inicio</router-link>
+          <router-link to="/sobre-mi" class="nav-link nav-link-avatar">
+            <img v-if="avatarUrl" :src="avatarUrl" alt="" class="nav-avatar" />
+            <span v-else class="nav-avatar-placeholder">JA</span>
+            Sobre Mí
+          </router-link>
           <router-link to="/admin" class="nav-link nav-link-admin">Admin</router-link>
         </nav>
       </div>
@@ -25,7 +30,16 @@
 </template>
 
 <script setup>
+import { computed, onMounted } from 'vue'
+import { usePerfilStore } from './stores/perfil'
 import ChatWidget from './components/public/ChatWidget.vue'
+
+const perfilStore = usePerfilStore()
+const avatarUrl = computed(() => perfilStore.items[0]?.avatar_url || null)
+
+onMounted(() => {
+  perfilStore.fetchAll()
+})
 </script>
 
 <style scoped>
@@ -76,6 +90,7 @@ import ChatWidget from './components/public/ChatWidget.vue'
 }
 
 .nav-link {
+  padding: 0.375rem 0;
   color: var(--color-gray-300);
   font-size: 0.875rem;
   font-weight: 500;
@@ -87,8 +102,37 @@ import ChatWidget from './components/public/ChatWidget.vue'
   text-decoration: none;
 }
 
+.nav-link-avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-gray-600);
+  flex-shrink: 0;
+}
+
+.nav-avatar-placeholder {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-gray-700);
+  color: var(--color-gray-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
 .nav-link-admin {
-  padding: 0.25rem 0.75rem;
+  padding: 0.375rem 0.75rem;
   border: 1px solid var(--color-gray-600);
   border-radius: var(--radius-sm);
 }

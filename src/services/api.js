@@ -88,4 +88,21 @@ export const api = {
   deleteEstudio(id) {
     return request(`/estudios/${id}`, { method: 'DELETE' })
   },
+
+  // Perfil
+  getPerfil(params = '') {
+    return request(`/perfil/${params}`)
+  },
+  getPerfilById(id) {
+    return request(`/perfil/${id}`)
+  },
+  createPerfil(data) {
+    return request('/perfil/', { method: 'POST', body: JSON.stringify(data) })
+  },
+  updatePerfil(id, data) {
+    return request(`/perfil/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  },
+  deletePerfil(id) {
+    return request(`/perfil/${id}`, { method: 'DELETE' })
+  },
 }
