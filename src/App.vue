@@ -1,0 +1,108 @@
+<template>
+  <div class="app">
+    <header class="header">
+      <div class="container header-inner">
+        <router-link to="/" class="logo">
+          <span class="logo-icon">&lt;/&gt;</span>
+          <span class="logo-text">Jaime Campillay</span>
+        </router-link>
+        <nav class="nav">
+          <router-link to="/" class="nav-link">Inicio</router-link>
+          <router-link to="/admin" class="nav-link nav-link-admin">Admin</router-link>
+        </nav>
+      </div>
+    </header>
+    <main class="main">
+      <router-view />
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; {{ new Date().getFullYear() }} Jaime Gabriel Campillay Rojas &mdash; Ingeniero Civil Industrial</p>
+      </div>
+    </footer>
+    <ChatWidget />
+  </div>
+</template>
+
+<script setup>
+import ChatWidget from './components/public/ChatWidget.vue'
+</script>
+
+<style scoped>
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--color-primary-dark);
+  color: #fff;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.logo:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.logo-icon {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: var(--color-gray-300);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.nav-link:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-link-admin {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--color-gray-600);
+  border-radius: var(--radius-sm);
+}
+
+.main {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+.footer {
+  background: var(--color-gray-900);
+  color: var(--color-gray-500);
+  padding: 1.5rem 0;
+  text-align: center;
+  font-size: 0.875rem;
+}
+</style>
