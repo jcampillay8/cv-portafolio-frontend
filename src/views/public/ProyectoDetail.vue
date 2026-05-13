@@ -10,6 +10,8 @@
         <span class="detail-date">Actualizado: {{ formatDate(store.current.updated_at) }}</span>
       </div>
 
+      <img v-if="store.current.image_url" :src="store.current.image_url" :alt="store.current.titulo" class="detail-img" />
+
       <div class="detail-tags">
         <span v-for="tag in store.current.tags" :key="tag" class="tag tag-industry">{{ tag }}</span>
       </div>
@@ -86,6 +88,14 @@ onMounted(() => store.fetchOne(route.params.id))
   display: inline-block;
   margin-bottom: 1.5rem;
   font-size: 0.875rem;
+}
+
+.detail-img {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.5rem;
 }
 
 .detail-title {

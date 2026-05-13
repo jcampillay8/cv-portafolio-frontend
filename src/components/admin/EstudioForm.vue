@@ -14,6 +14,10 @@
         <label>Año de Obtención</label>
         <input v-model.number="form.anio_obtencion" type="number" class="form-input" min="1900" :max="new Date().getFullYear()" required />
       </div>
+      <div class="form-group">
+        <label>URL de Imagen (o ID de Google Drive)</label>
+        <input v-model="form.image_url" type="text" class="form-input" placeholder="ID de Drive o URL completa" @blur="handleParseImageUrl" />
+      </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar</button>
         <button type="button" class="btn btn-outline" @click="$emit('cancel')">Cancelar</button>
@@ -24,6 +28,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { parseImageUrl } from '../../services/utils.js'
 
 const props = defineProps({
   estudio: { type: Object, default: null },
@@ -34,7 +39,12 @@ const form = ref({
   institucion: '',
   titulo: '',
   anio_obtencion: new Date().getFullYear(),
+  image_url: '',
 })
+
+function handleParseImageUrl() {
+  form.value.image_url = parseImageUrl(form.value.image_url)
+}
 
 function handleSubmit() {
   emit('save', { ...form.value })

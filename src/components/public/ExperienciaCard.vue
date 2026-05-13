@@ -1,5 +1,8 @@
 <template>
   <router-link :to="`/experiencia/${experiencia.id}`" class="card experiencia-card">
+    <div v-if="experiencia.image_url" class="card-img">
+      <img :src="experiencia.image_url" :alt="experiencia.empresa" />
+    </div>
     <div class="card-body">
       <div class="card-header">
         <div>
@@ -40,6 +43,19 @@ function truncate(text, max) {
 .experiencia-card:hover {
   text-decoration: none;
   color: inherit;
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .card-body {

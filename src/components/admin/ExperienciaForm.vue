@@ -27,6 +27,10 @@
         <textarea v-model="form.descripcion_logros" class="form-textarea" rows="6" required></textarea>
       </div>
       <div class="form-group">
+        <label>URL de Imagen (o ID de Google Drive)</label>
+        <input v-model="form.image_url" type="text" class="form-input" placeholder="ID de Drive o URL completa" @blur="parseImageUrlHandler" />
+      </div>
+      <div class="form-group">
         <label>Tags de Industria (separado por comas)</label>
         <input v-model="tagsInput" type="text" class="form-input" placeholder="Minería, Banca, IA" @blur="parseTags" />
       </div>
@@ -40,6 +44,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { parseImageUrl } from '../../services/utils.js'
 
 const props = defineProps({
   experiencia: { type: Object, default: null },
@@ -52,10 +57,15 @@ const form = ref({
   periodo_inicio: '',
   periodo_fin: '',
   descripcion_logros: '',
+  image_url: '',
   tags_industria: [],
 })
 
 const tagsInput = ref('')
+
+function parseImageUrlHandler() {
+  form.value.image_url = parseImageUrl(form.value.image_url)
+}
 
 function parseTags() {
   form.value.tags_industria = tagsInput.value.split(',').map((s) => s.trim()).filter(Boolean)

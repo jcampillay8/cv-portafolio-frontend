@@ -39,6 +39,10 @@
         </div>
       </div>
       <div class="form-group">
+        <label>URL de Imagen (o ID de Google Drive)</label>
+        <input v-model="form.image_url" type="text" class="form-input" placeholder="ID de Drive o URL completa" @blur="handleParseImageUrl" />
+      </div>
+      <div class="form-group">
         <label>KPIs (JSON)</label>
         <textarea v-model="kpisText" class="form-textarea" rows="3" placeholder='{"Precisión": "98%", "Latencia": "50ms"}' @blur="parseKpis"></textarea>
       </div>
@@ -52,6 +56,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { parseImageUrl } from '../../services/utils.js'
 
 const props = defineProps({
   proyecto: { type: Object, default: null },
@@ -66,6 +71,7 @@ const form = ref({
   fecha_proyecto: '',
   link_github: '',
   link_demo: '',
+  image_url: '',
   kpis: {},
   tags: [],
 })
@@ -73,6 +79,10 @@ const form = ref({
 const stackInput = ref('')
 const tagsInput = ref('')
 const kpisText = ref('')
+
+function handleParseImageUrl() {
+  form.value.image_url = parseImageUrl(form.value.image_url)
+}
 
 function parseStack() {
   form.value.stack_tecnologico = stackInput.value.split(',').map((s) => s.trim()).filter(Boolean)

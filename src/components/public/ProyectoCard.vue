@@ -1,5 +1,8 @@
 <template>
   <router-link :to="`/proyecto/${proyecto.id}`" class="card proyecto-card">
+    <div v-if="proyecto.image_url" class="card-img">
+      <img :src="proyecto.image_url" :alt="proyecto.titulo" />
+    </div>
     <div class="card-body">
       <div class="card-header">
         <h3 class="card-title">{{ proyecto.titulo }}</h3>
@@ -42,6 +45,19 @@ function formatDate(d) {
 .proyecto-card:hover {
   text-decoration: none;
   color: inherit;
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .card-body {
