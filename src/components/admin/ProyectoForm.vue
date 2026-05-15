@@ -101,6 +101,7 @@ function parseKpis() {
 }
 
 function handleSubmit() {
+  handleParseImageUrl()
   parseStack()
   parseTags()
   parseKpis()

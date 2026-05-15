@@ -56,6 +56,12 @@ const routes = [
     component: () => import('../views/admin/PerfilAdmin.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/admin/secciones',
+    name: 'SeccionesAdmin',
+    component: () => import('../views/admin/SeccionesAdmin.vue'),
+    meta: { requiresAuth: true },
+  },
 ]
 
 const router = createRouter({

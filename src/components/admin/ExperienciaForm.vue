@@ -18,8 +18,12 @@
           <input v-model="form.periodo_inicio" type="date" class="form-input" required />
         </div>
         <div class="form-group flex-1">
-          <label>Periodo Fin (dejar vacío si es actual)</label>
-          <input v-model="form.periodo_fin" type="date" class="form-input" />
+          <label>Periodo Fin</label>
+          <input v-model="form.periodo_fin" type="date" class="form-input" :disabled="esActual" />
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="esActual" />
+            Actualmente trabajando aquí
+          </label>
         </div>
       </div>
       <div class="form-group">
@@ -43,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { parseImageUrl } from '../../services/utils.js'
 
 const props = defineProps({
@@ -62,6 +66,11 @@ const form = ref({
 })
 
 const tagsInput = ref('')
+const esActual = ref(false)
+
+watch(esActual, (val) => {
+  if (val) form.value.periodo_fin = ''
+})
 
 function parseImageUrlHandler() {
   form.value.image_url = parseImageUrl(form.value.image_url)
@@ -74,7 +83,7 @@ function parseTags() {
 function handleSubmit() {
   parseTags()
   const data = { ...form.value }
-  if (!data.periodo_fin) data.periodo_fin = null
+  if (esActual.value) data.periodo_fin = null
   emit('save', data)
 }
 
@@ -83,6 +92,7 @@ onMounted(() => {
     form.value = { ...props.experiencia }
     form.value.periodo_inicio = props.experiencia.periodo_inicio?.slice(0, 10) || ''
     form.value.periodo_fin = props.experiencia.periodo_fin?.slice(0, 10) || ''
+    esActual.value = !props.experiencia.periodo_fin
     tagsInput.value = (props.experiencia.tags_industria || []).join(', ')
   }
 })
@@ -108,6 +118,22 @@ onMounted(() => {
 
 .flex-1 {
   flex: 1;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-gray-600);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
 }
 
 .form-actions {

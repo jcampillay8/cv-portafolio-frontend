@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '../services/api'
+import { parseImageUrl } from '../services/utils'
+
+function normalize(item) {
+  if (item.image_url) item.image_url = parseImageUrl(item.image_url)
+  return item
+}
 
 export const useProyectosStore = defineStore('proyectos', () => {
   const items = ref([])
@@ -10,7 +16,7 @@ export const useProyectosStore = defineStore('proyectos', () => {
   async function fetchAll(params = '') {
     loading.value = true
     try {
-      items.value = await api.getProyectos(params)
+      items.value = (await api.getProyectos(params)).map(normalize)
     } finally {
       loading.value = false
     }
@@ -19,7 +25,7 @@ export const useProyectosStore = defineStore('proyectos', () => {
   async function fetchOne(id) {
     loading.value = true
     try {
-      current.value = await api.getProyecto(id)
+      current.value = normalize(await api.getProyecto(id))
     } finally {
       loading.value = false
     }

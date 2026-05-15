@@ -87,6 +87,7 @@ onMounted(() => store.fetchAll())
 
 .admin-item {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
@@ -109,6 +110,7 @@ onMounted(() => store.fetchAll())
 
 .admin-item-tags {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.375rem;
 }
 

@@ -8,19 +8,19 @@
     <article v-else class="about">
       <router-link to="/" class="back-link">&larr; Volver</router-link>
       <div class="about-hero">
+        <h1 class="about-title">Sobre Mí</h1>
+        <p class="about-subtitle">Jaime Gabriel Campillay Rojas</p>
+      </div>
+      <div class="about-body">
+        <div class="about-content">
+          <div class="markdown" v-html="renderMarkdown(profile.descripcion)"></div>
+        </div>
         <img
           v-if="profile.image_url"
           :src="profile.image_url"
           :alt="'Jaime Campillay'"
           class="about-img"
         />
-        <div class="about-header">
-          <h1 class="about-title">Sobre Mí</h1>
-          <p class="about-subtitle">Jaime Gabriel Campillay Rojas</p>
-        </div>
-      </div>
-      <div class="about-content">
-        <div class="markdown" v-html="renderMarkdown(profile.descripcion)"></div>
       </div>
     </article>
   </div>
@@ -64,17 +64,19 @@ onMounted(() => store.fetchAll())
 }
 
 .about-hero {
+  margin-bottom: 1.5rem;
+}
+
+.about-body {
   display: flex;
-  align-items: center;
   gap: 2rem;
-  margin-bottom: 2.5rem;
+  align-items: flex-start;
 }
 
 .about-img {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  object-fit: cover;
+  width: 280px;
+  height: auto;
+  border-radius: var(--radius-lg);
   border: 3px solid var(--color-gray-200);
   flex-shrink: 0;
 }
@@ -111,12 +113,15 @@ onMounted(() => store.fetchAll())
 
 @media (max-width: 600px) {
   .about-hero {
-    flex-direction: column;
     text-align: center;
   }
+  .about-body {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
   .about-img {
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    max-width: 280px;
   }
 }
 </style>

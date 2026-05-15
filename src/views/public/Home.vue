@@ -9,46 +9,69 @@
       </p>
     </section>
 
-    <FilterBar
-      :all-tags="availableTags"
-      :selected-tags="selectedTags"
-      @toggle="handleToggleTag"
-      @clear="selectedTags = []"
-    />
-
-    <section class="section">
-      <h2 class="section-title">Proyectos</h2>
-      <div v-if="proyectosStore.loading" class="loading"><div class="spinner"></div></div>
-      <div v-else-if="!filteredProyectos.length" class="empty-state">
-        No se encontraron proyectos con los filtros seleccionados.
-      </div>
-      <div v-else class="grid">
-        <ProyectoCard v-for="p in filteredProyectos" :key="p.id" :proyecto="p" />
+    <section class="section" :class="{ collapsed: !expanded.tags }">
+      <h2 class="section-title" @click="toggle('tags')">
+        Tags
+        <span class="chevron">{{ expanded.tags ? '▾' : '▸' }}</span>
+      </h2>
+      <div v-if="expanded.tags">
+        <FilterBar
+          :all-tags="availableTags"
+          :selected-tags="selectedTags"
+          @toggle="handleToggleTag"
+          @clear="selectedTags = []"
+        />
       </div>
     </section>
 
-    <section class="section">
-      <h2 class="section-title">Experiencia</h2>
-      <div v-if="experienciasStore.loading" class="loading"><div class="spinner"></div></div>
-      <div v-else-if="!filteredExperiencias.length" class="empty-state">
-        No se encontraron experiencias con los filtros seleccionados.
-      </div>
-      <div v-else class="grid">
-        <ExperienciaCard v-for="e in filteredExperiencias" :key="e.id" :experiencia="e" />
+    <section class="section" :class="{ collapsed: !expanded.proyectos }">
+      <h2 class="section-title" @click="toggle('proyectos')">
+        <span>Proyectos <span class="count">{{ filteredProyectos.length }}</span></span>
+        <span class="chevron">{{ expanded.proyectos ? '▾' : '▸' }}</span>
+      </h2>
+      <div v-if="expanded.proyectos">
+        <div v-if="proyectosStore.loading" class="loading"><div class="spinner"></div></div>
+        <div v-else-if="!filteredProyectos.length" class="empty-state">
+          No se encontraron proyectos con los filtros seleccionados.
+        </div>
+        <div v-else class="grid">
+          <ProyectoCard v-for="p in filteredProyectos" :key="p.id" :proyecto="p" />
+        </div>
       </div>
     </section>
 
-    <section class="section">
-      <h2 class="section-title">Estudios & Certificaciones</h2>
-      <div v-if="estudiosStore.loading" class="loading"><div class="spinner"></div></div>
-      <div v-else-if="!estudiosStore.items.length" class="empty-state">Sin estudios registrados.</div>
-      <div v-else class="estudios-list">
-        <div v-for="e in estudiosStore.items" :key="e.id" class="card estudio-item">
-          <img v-if="e.image_url" :src="e.image_url" :alt="e.institucion" class="estudio-img" />
-          <div class="estudio-year">{{ e.anio_obtencion }}</div>
-          <div class="estudio-info">
-            <h3>{{ e.titulo }}</h3>
-            <span class="estudio-institucion">{{ e.institucion }}</span>
+    <section class="section" :class="{ collapsed: !expanded.experiencia }">
+      <h2 class="section-title" @click="toggle('experiencia')">
+        <span>Experiencia <span class="count">{{ filteredExperiencias.length }}</span></span>
+        <span class="chevron">{{ expanded.experiencia ? '▾' : '▸' }}</span>
+      </h2>
+      <div v-if="expanded.experiencia">
+        <div v-if="experienciasStore.loading" class="loading"><div class="spinner"></div></div>
+        <div v-else-if="!filteredExperiencias.length" class="empty-state">
+          No se encontraron experiencias con los filtros seleccionados.
+        </div>
+        <div v-else class="grid">
+          <ExperienciaCard v-for="e in filteredExperiencias" :key="e.id" :experiencia="e" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section" :class="{ collapsed: !expanded.estudios }">
+      <h2 class="section-title" @click="toggle('estudios')">
+        <span>Estudios & Certificaciones <span class="count">{{ estudiosStore.items.length }}</span></span>
+        <span class="chevron">{{ expanded.estudios ? '▾' : '▸' }}</span>
+      </h2>
+      <div v-if="expanded.estudios">
+        <div v-if="estudiosStore.loading" class="loading"><div class="spinner"></div></div>
+        <div v-else-if="!estudiosStore.items.length" class="empty-state">Sin estudios registrados.</div>
+        <div v-else class="estudios-list">
+          <div v-for="e in estudiosStore.items" :key="e.id" class="card estudio-item">
+            <img v-if="e.image_url" :src="e.image_url" :alt="e.institucion" class="estudio-img" />
+            <div class="estudio-year">{{ e.anio_obtencion }}</div>
+            <div class="estudio-info">
+              <h3>{{ e.titulo }}</h3>
+              <span class="estudio-institucion">{{ e.institucion }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -57,17 +80,31 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import ProyectoCard from '../../components/public/ProyectoCard.vue'
 import ExperienciaCard from '../../components/public/ExperienciaCard.vue'
 import FilterBar from '../../components/public/FilterBar.vue'
 import { useProyectosStore } from '../../stores/proyectos'
 import { useExperienciasStore } from '../../stores/experiencias'
 import { useEstudiosStore } from '../../stores/estudios'
+import { useSectionConfig } from '../../composables/useSectionConfig'
 
 const proyectosStore = useProyectosStore()
 const experienciasStore = useExperienciasStore()
 const estudiosStore = useEstudiosStore()
+
+const { defaults } = useSectionConfig()
+
+const expanded = reactive({
+  tags: defaults.tags,
+  proyectos: defaults.proyectos,
+  experiencia: defaults.experiencia,
+  estudios: defaults.estudios,
+})
+
+function toggle(key) {
+  expanded[key] = !expanded[key]
+}
 
 const selectedTags = ref([])
 
@@ -136,6 +173,41 @@ onMounted(async () => {
 
 .section {
   margin-bottom: 3rem;
+}
+
+.section-title {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-gray-200);
+  margin-bottom: 1rem;
+}
+
+.section-title:hover {
+  color: var(--color-accent);
+}
+
+.count {
+  font-weight: 400;
+  color: var(--color-gray-400);
+  margin-left: 0.375rem;
+}
+
+.chevron {
+  font-size: 0.875rem;
+  transition: transform 0.2s;
+}
+
+.section.collapsed .section-title {
+  margin-bottom: 0;
+  border-bottom-color: transparent;
+}
+
+.section.collapsed {
+  margin-bottom: 1rem;
 }
 
 .grid {

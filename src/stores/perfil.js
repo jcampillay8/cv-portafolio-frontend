@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '../services/api'
+import { parseImageUrl } from '../services/utils'
+
+function normalize(item) {
+  if (item.image_url) item.image_url = parseImageUrl(item.image_url)
+  if (item.avatar_url) item.avatar_url = parseImageUrl(item.avatar_url)
+  return item
+}
 
 export const usePerfilStore = defineStore('perfil', () => {
   const items = ref([])
@@ -10,7 +17,7 @@ export const usePerfilStore = defineStore('perfil', () => {
   async function fetchAll() {
     loading.value = true
     try {
-      items.value = await api.getPerfil()
+      items.value = (await api.getPerfil()).map(normalize)
     } finally {
       loading.value = false
     }
@@ -19,7 +26,7 @@ export const usePerfilStore = defineStore('perfil', () => {
   async function fetchOne(id) {
     loading.value = true
     try {
-      current.value = await api.getPerfilById(id)
+      current.value = normalize(await api.getPerfilById(id))
     } finally {
       loading.value = false
     }
