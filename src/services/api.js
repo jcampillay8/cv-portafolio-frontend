@@ -105,4 +105,12 @@ export const api = {
   deletePerfil(id) {
     return request(`/perfil/${id}`, { method: 'DELETE' })
   },
+
+  // Chat
+  chat(messages) {
+    return request('/chat/', {
+      method: 'POST',
+      body: JSON.stringify({ messages }),
+    })
+  },
 }

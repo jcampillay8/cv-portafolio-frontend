@@ -8,26 +8,66 @@
       <div v-if="open" class="chat-panel">
         <div class="chat-header">
           <h4>Asistente IA</h4>
-          <span class="chat-badge">Próximamente</span>
         </div>
-        <div class="chat-body">
-          <div class="chat-message bot">
-            ¡Hola! Soy el asistente virtual de Jaime. Estoy en desarrollo y pronto podré responderte sobre su trayectoria profesional.
+        <div class="chat-body" ref="chatBody">
+          <div v-for="(msg, i) in messages" :key="i" class="chat-message" :class="msg.role">
+            {{ msg.content }}
           </div>
+          <div v-if="loading" class="chat-message bot typing">Escribiendo...</div>
         </div>
-        <div class="chat-footer">
-          <input type="text" class="chat-input" placeholder="Escribe un mensaje..." disabled />
-          <button class="chat-send" disabled>Enviar</button>
-        </div>
+        <form class="chat-footer" @submit.prevent="send">
+          <input
+            v-model="input"
+            type="text"
+            class="chat-input"
+            placeholder="Pregunta sobre mi trayectoria..."
+            :disabled="loading"
+          />
+          <button type="submit" class="chat-send" :disabled="loading || !input.trim()">Enviar</button>
+        </form>
       </div>
     </Transition>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick, watch } from 'vue'
+import { api } from '../../services/api'
 
 const open = ref(false)
+const input = ref('')
+const loading = ref(false)
+const messages = ref([
+  { role: 'bot', content: '¡Hola! Soy el asistente virtual de Jaime. Pregúntame lo que quieras sobre su trayectoria profesional, proyectos, estudios o experiencia.' },
+])
+const chatBody = ref(null)
+
+async function send() {
+  const text = input.value.trim()
+  if (!text || loading.value) return
+
+  messages.value.push({ role: 'user', content: text })
+  input.value = ''
+  loading.value = true
+
+  try {
+    const msgs = messages.value.map((m) => ({
+      role: m.role === 'bot' ? 'assistant' : 'user',
+      content: m.content,
+    }))
+    const res = await api.chat(msgs)
+    messages.value.push({ role: 'bot', content: res.content })
+  } catch {
+    messages.value.push({ role: 'bot', content: 'Lo siento, tuve un problema al conectarme. Intenta de nuevo.' })
+  } finally {
+    loading.value = false
+  }
+}
+
+watch(messages, async () => {
+  await nextTick()
+  if (chatBody.value) chatBody.value.scrollTop = chatBody.value.scrollHeight
+}, { deep: true })
 </script>
 
 <style scoped>
@@ -60,8 +100,8 @@ const open = ref(false)
   position: absolute;
   bottom: 56px;
   right: 0;
-  width: 340px;
-  height: 420px;
+  width: 360px;
+  height: 460px;
   background: #fff;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
@@ -72,12 +112,9 @@ const open = ref(false)
 }
 
 .chat-header {
-  padding: 1rem;
+  padding: 0.875rem 1rem;
   background: var(--color-primary);
   color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .chat-header h4 {
@@ -85,31 +122,39 @@ const open = ref(false)
   font-weight: 600;
 }
 
-.chat-badge {
-  font-size: 0.6875rem;
-  padding: 0.125rem 0.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-}
-
 .chat-body {
   flex: 1;
   padding: 1rem;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .chat-message {
-  padding: 0.75rem;
+  padding: 0.625rem 0.875rem;
   border-radius: var(--radius-md);
   font-size: 0.8125rem;
   line-height: 1.5;
-  max-width: 85%;
+  max-width: 90%;
+  white-space: pre-wrap;
 }
 
 .chat-message.bot {
   background: var(--color-gray-100);
   color: var(--color-gray-700);
-  margin-bottom: 0.5rem;
+  align-self: flex-start;
+}
+
+.chat-message.user {
+  background: var(--color-primary);
+  color: #fff;
+  align-self: flex-end;
+}
+
+.chat-message.typing {
+  color: var(--color-gray-400);
+  font-style: italic;
 }
 
 .chat-footer {
@@ -126,20 +171,27 @@ const open = ref(false)
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.8125rem;
+  outline: none;
 }
 
-.chat-input:disabled {
-  background: var(--color-gray-100);
-  cursor: not-allowed;
+.chat-input:focus {
+  border-color: var(--color-accent);
 }
 
 .chat-send {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.chat-send:disabled {
   background: var(--color-gray-300);
   color: var(--color-gray-500);
-  font-size: 0.8125rem;
   cursor: not-allowed;
 }
 
