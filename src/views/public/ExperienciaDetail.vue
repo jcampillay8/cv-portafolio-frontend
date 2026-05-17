@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useExperienciasStore } from '../../stores/experiencias'
 
@@ -49,6 +49,12 @@ function renderMarkdown(text) {
     .replace(/\n/g, '<br/>')
   return '<p>' + html + '</p>'
 }
+
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    store.fetchOne(newId)
+  }
+})
 
 onMounted(() => store.fetchOne(route.params.id))
 </script>

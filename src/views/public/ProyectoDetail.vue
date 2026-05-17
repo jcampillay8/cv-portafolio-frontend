@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProyectosStore } from '../../stores/proyectos'
 
@@ -96,6 +96,12 @@ function renderMarkdown(text) {
 function isSimple(val) {
   return typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean'
 }
+
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    store.fetchOne(newId)
+  }
+})
 
 onMounted(() => store.fetchOne(route.params.id))
 </script>

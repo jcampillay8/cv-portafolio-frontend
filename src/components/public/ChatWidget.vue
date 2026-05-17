@@ -17,7 +17,7 @@
           <h4>Asistente IA</h4>
           <button class="close-panel-btn" @click="open = false" title="Cerrar">&times;</button>
         </div>
-        <div class="chat-body" ref="chatBody">
+        <div class="chat-body" ref="chatBody" @click="handleChatClick">
           <div 
             v-for="(msg, i) in messages" 
             :key="i" 
@@ -45,6 +45,7 @@
 
 <script setup>
 import { ref, nextTick, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { api } from '../../services/api'
 import { marked } from 'marked' // 1. Importamos la librería
 
@@ -55,12 +56,26 @@ const messages = ref([
   { role: 'bot', content: '¡Hola! Soy el asistente virtual de Jaime. Pregúntame lo que quieras sobre su trayectoria profesional, proyectos, estudios o experiencia.' },
 ])
 const chatBody = ref(null)
+const router = useRouter()
 
 // 2. Función para convertir texto Markdown a HTML seguro
 function renderMarkdown(text) {
   if (!text) return ''
   // marked.parse devuelve el HTML. Hacemos un parse síncrono estándar.
   return marked.parse(text, { breaks: true }) 
+}
+
+function handleChatClick(event) {
+  const link = event.target.closest('a')
+  if (!link) return
+
+  const href = link.getAttribute('href')
+  if (href && href.startsWith('/')) {
+    event.preventDefault()
+    router.push(href)
+  } else if (href === '#') {
+    event.preventDefault() // Evitamos comportamiento por defecto para el botón 'NO'
+  }
 }
 
 async function send() {
@@ -223,6 +238,45 @@ watch(messages, async () => {
 }
 .chat-message :deep(li) {
   margin-bottom: 0.25rem;
+}
+
+/* Estilos para enlaces interactivos (SÍ / NO) en el bot */
+.chat-message :deep(a) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.8125rem;
+  margin: 0.5rem 0.25rem 0.25rem 0.25rem;
+  transition: all 0.2s ease;
+}
+
+/* Botón SÍ / Enlace interno */
+.chat-message.bot :deep(a[href^="/"]) {
+  background-color: var(--color-primary);
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chat-message.bot :deep(a[href^="/"]):hover {
+  background-color: var(--color-primary-dark, #1d4ed8);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Botón NO / Enlace inactivo */
+.chat-message.bot :deep(a[href^="#"]) {
+  background-color: var(--color-gray-200, #e5e7eb);
+  color: var(--color-gray-700, #374151) !important;
+  border: 1px solid var(--color-gray-300, #d1d5db);
+}
+
+.chat-message.bot :deep(a[href^="#"]):hover {
+  background-color: var(--color-gray-300, #d1d5db);
+  transform: translateY(-1px);
 }
 
 /* Estilos para tablas que el bot pueda generar */
