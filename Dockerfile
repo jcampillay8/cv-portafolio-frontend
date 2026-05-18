@@ -12,7 +12,9 @@ RUN pnpm build
 
 FROM nginx:1.27-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
-CMD ["sh", "-c", "sed -i 's/listen [0-9]*;/listen '\"$PORT\"';/g' /etc/nginx/conf.d/default.conf && sed -i 's|BACKEND_URL_PLACEHOLDER|'\"$BACKEND_URL\"'|g' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+# CAMBIA ESTA LÍNEA (Copiamos el template a la ruta de plantillas de Nginx):
+COPY default.conf.template /etc/nginx/templates/default.conf.template
+
+# Tu CMD vuelve a ser el original, Nginx se encarga del resto automáticamente:
+CMD ["nginx", "-g", "daemon off;"]
