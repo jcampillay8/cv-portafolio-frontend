@@ -2,7 +2,7 @@
   <div class="chat-widget" :class="{ 'is-open': open }">
     <Transition name="fade">
       <div v-if="!open" class="chat-prompt-hint">
-        💬 ¡Pregúntame sobre mi trayectoria!
+        <strong>💬 ¡Pregúntame sobre mi trayectoria!</strong>
       </div>
     </Transition>
 
@@ -73,6 +73,10 @@ function handleChatClick(event) {
   if (href && href.startsWith('/')) {
     event.preventDefault()
     router.push(href)
+    // En móvil (<= 600px) sí cerramos el chat para que el usuario pueda ver la vista completa a la que navegó
+    if (window.innerWidth <= 600) {
+      open.value = false
+    }
   } else if (href === '#') {
     event.preventDefault() // Evitamos comportamiento por defecto para el botón 'NO'
   }
@@ -127,8 +131,8 @@ watch(messages, async () => {
   color: var(--color-gray-700, #333);
   padding: 0.5rem 0.875rem;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  font-size: 0.8125rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  font-size: 0.8725rem;
   font-weight: 500;
   border: 1px solid var(--color-gray-200, #e5e7eb);
   animation: float-bounce 3s ease-in-out infinite;
