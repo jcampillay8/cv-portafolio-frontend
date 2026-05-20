@@ -15,6 +15,14 @@
         <input v-model.number="form.anio_obtencion" type="number" class="form-input" min="1900" :max="new Date().getFullYear()" required />
       </div>
       <div class="form-group">
+        <label>Descripción Detallada (Markdown)</label>
+        <textarea v-model="form.descripcion_detallada" class="form-textarea" rows="6" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Enlace / URL de Credencial</label>
+        <input v-model="form.link" type="url" class="form-input" placeholder="https://..." />
+      </div>
+      <div class="form-group">
         <label>URL de Imagen (o ID de Google Drive)</label>
         <input v-model="form.image_url" type="text" class="form-input" placeholder="ID de Drive o URL completa" @blur="handleParseImageUrl" />
       </div>
@@ -39,6 +47,8 @@ const form = ref({
   institucion: '',
   titulo: '',
   anio_obtencion: new Date().getFullYear(),
+  descripcion_detallada: '',
+  link: '',
   image_url: '',
 })
 

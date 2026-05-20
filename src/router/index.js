@@ -17,6 +17,11 @@ const routes = [
     component: () => import('../views/public/ExperienciaDetail.vue'),
   },
   {
+    path: '/estudios/:id',
+    name: 'EstudioDetail',
+    component: () => import('../views/public/EstudioDetail.vue'),
+  },
+  {
     path: '/sobre-mi',
     name: 'About',
     component: () => import('../views/public/About.vue'),

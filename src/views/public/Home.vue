@@ -65,14 +65,14 @@
         <div v-if="estudiosStore.loading" class="loading"><div class="spinner"></div></div>
         <div v-else-if="!estudiosStore.items.length" class="empty-state">Sin estudios registrados.</div>
         <div v-else class="estudios-list">
-          <div v-for="e in sortedEstudios" :key="e.id" class="card estudio-item">
+          <router-link v-for="e in sortedEstudios" :key="e.id" :to="`/estudios/${e.id}`" class="card estudio-item">
             <img v-if="e.image_url" :src="e.image_url" :alt="e.institucion" class="estudio-img" />
             <div class="estudio-year">{{ e.anio_obtencion }}</div>
             <div class="estudio-info">
               <h3>{{ e.titulo }}</h3>
               <span class="estudio-institucion">{{ e.institucion }}</span>
             </div>
-          </div>
+          </router-link>
         </div>
       </div>
     </section>
@@ -231,6 +231,13 @@ onMounted(async () => {
   align-items: center;
   gap: 1.25rem;
   padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.estudio-item:hover {
+  text-decoration: none;
+  color: inherit;
 }
 
 .estudio-img {

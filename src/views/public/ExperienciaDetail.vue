@@ -14,6 +14,12 @@
       <div class="detail-tags">
         <span v-for="tag in store.current.tags_industria" :key="tag" class="tag tag-industry">{{ tag }}</span>
       </div>
+
+      <div class="detail-actions" v-if="store.current.link || store.current.link_demo">
+        <a v-if="store.current.link" :href="store.current.link" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Ver Enlace / Más Info</a>
+        <a v-if="store.current.link_demo" :href="store.current.link_demo" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Ver Demo</a>
+      </div>
+
       <div class="detail-content">
         <h3 class="section-title">Logros</h3>
         <div class="markdown" v-html="renderMarkdown(store.current.descripcion_logros)"></div>
@@ -104,6 +110,12 @@ onMounted(() => store.fetchOne(route.params.id))
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 2rem;
+}
+
+.detail-actions {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .detail-content {

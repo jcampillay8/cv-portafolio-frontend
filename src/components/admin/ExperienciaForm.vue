@@ -35,6 +35,10 @@
         <input v-model="form.image_url" type="text" class="form-input" placeholder="ID de Drive o URL completa" @blur="parseImageUrlHandler" />
       </div>
       <div class="form-group">
+        <label>Enlace Externo / Proyecto Relacionado</label>
+        <input v-model="form.link" type="url" class="form-input" placeholder="https://..." />
+      </div>
+      <div class="form-group">
         <label>Tags de Industria (separado por comas)</label>
         <input v-model="tagsInput" type="text" class="form-input" placeholder="Minería, Banca, IA" @blur="parseTags" />
       </div>
@@ -61,6 +65,7 @@ const form = ref({
   periodo_inicio: '',
   periodo_fin: '',
   descripcion_logros: '',
+  link: '',
   image_url: '',
   tags_industria: [],
 })
