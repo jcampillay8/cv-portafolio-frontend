@@ -3,7 +3,7 @@
     <div v-if="store.loading" class="loading"><div class="spinner"></div></div>
     <div v-else-if="!store.current" class="empty-state">Estudio / Certificación no encontrado.</div>
     <article v-else class="detail">
-      <router-link to="/" class="back-link">&larr; Volver al inicio</router-link>
+      <router-link to="/portafolio" class="back-link">&larr; Volver al Portafolio</router-link>
       <h1 class="detail-title">{{ store.current.titulo }}</h1>
       <p class="detail-institution">{{ store.current.institucion }}</p>
       

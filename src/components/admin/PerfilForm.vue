@@ -14,6 +14,26 @@
         <label>URL del Avatar navbar (o ID de Google Drive)</label>
         <input v-model="form.avatar_url" type="text" class="form-input" placeholder="ID de Drive o URL completa" @blur="handleParseAvatarUrl" />
       </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input v-model="form.telefono" type="text" class="form-input" placeholder="+56 9 1234 5678" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input v-model="form.email" type="email" class="form-input" placeholder="correo@ejemplo.com" />
+      </div>
+      <div class="form-group">
+        <label>LinkedIn (URL)</label>
+        <input v-model="form.linkedin" type="url" class="form-input" placeholder="https://linkedin.com/in/usuario" />
+      </div>
+      <div class="form-group">
+        <label>GitHub (URL)</label>
+        <input v-model="form.github" type="url" class="form-input" placeholder="https://github.com/usuario" />
+      </div>
+      <div class="form-group">
+        <label>Ciudad</label>
+        <input v-model="form.ciudad" type="text" class="form-input" placeholder="Santiago, Chile" />
+      </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar</button>
         <button type="button" class="btn btn-outline" @click="$emit('cancel')">Cancelar</button>
@@ -35,6 +55,11 @@ const form = ref({
   descripcion: '',
   image_url: '',
   avatar_url: '',
+  telefono: '',
+  email: '',
+  linkedin: '',
+  github: '',
+  ciudad: '',
 })
 
 function handleParseImageUrl() {

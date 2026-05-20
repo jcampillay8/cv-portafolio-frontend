@@ -7,7 +7,9 @@
           <span class="logo-text">Jaime Campillay</span>
         </router-link>
         <nav class="nav">
-          <router-link to="/" class="nav-link">Inicio</router-link>
+          <router-link to="/" class="nav-link">Chat IA</router-link>
+          <router-link to="/portafolio" class="nav-link">Portafolio</router-link>
+          <router-link to="/contactame" class="nav-link">Contáctame</router-link>
           <router-link to="/sobre-mi" class="nav-link nav-link-avatar">
             <img v-if="avatarUrl" :src="avatarUrl" alt="" class="nav-avatar" />
             <span v-else class="nav-avatar-placeholder">JA</span>
@@ -25,15 +27,17 @@
         <p>&copy; {{ new Date().getFullYear() }} Jaime Gabriel Campillay Rojas &mdash; Ingeniero Civil Industrial</p>
       </div>
     </footer>
-    <ChatWidget />
+    <ChatWidget v-if="route.path !== '/'" />
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { usePerfilStore } from './stores/perfil'
 import ChatWidget from './components/public/ChatWidget.vue'
 
+const route = useRoute()
 const perfilStore = usePerfilStore()
 const avatarUrl = computed(() => perfilStore.items[0]?.avatar_url || null)
 

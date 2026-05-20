@@ -3,7 +3,7 @@
     <div v-if="store.loading" class="loading"><div class="spinner"></div></div>
     <div v-else-if="!store.current" class="empty-state">Experiencia no encontrada.</div>
     <article v-else class="detail">
-      <router-link to="/" class="back-link">&larr; Volver</router-link>
+      <router-link to="/portafolio" class="back-link">&larr; Volver al Portafolio</router-link>
       <h1 class="detail-title">{{ store.current.rol }}</h1>
       <p class="detail-company">{{ store.current.empresa }}</p>
       <div class="detail-meta">

@@ -7,6 +7,11 @@ const routes = [
     component: () => import('../views/public/Home.vue'),
   },
   {
+    path: '/portafolio',
+    name: 'Portfolio',
+    component: () => import('../views/public/PortfolioView.vue'),
+  },
+  {
     path: '/proyecto/:id',
     name: 'ProyectoDetail',
     component: () => import('../views/public/ProyectoDetail.vue'),
@@ -17,6 +22,11 @@ const routes = [
     component: () => import('../views/public/ExperienciaDetail.vue'),
   },
   {
+    path: '/estudios',
+    name: 'EstudiosList',
+    component: () => import('../views/public/EstudiosList.vue'),
+  },
+  {
     path: '/estudios/:id',
     name: 'EstudioDetail',
     component: () => import('../views/public/EstudioDetail.vue'),
@@ -25,6 +35,11 @@ const routes = [
     path: '/sobre-mi',
     name: 'About',
     component: () => import('../views/public/About.vue'),
+  },
+  {
+    path: '/contactame',
+    name: 'Contactame',
+    component: () => import('../views/public/Contactame.vue'),
   },
   {
     path: '/admin/login',
